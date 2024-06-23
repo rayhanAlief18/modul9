@@ -10,6 +10,26 @@
                 <h4>Edit Employee</h4>
             </div>
             <hr>
+            <ul class="list-inline mb-0 float-end">
+                <li class="list-inline-item">
+                <a href="{{ route('employees.exportExcel') }}" class="btn
+                btn-outline-success">
+                <i class="bi bi-download me-1"></i> to Excel </a>
+                </li>
+                <li class="list-inline-item">
+                <a href="{{ route('employees.exportPdf') }}" class="btn
+                btn-outline-danger">
+                <i class="bi bi-download me-1"></i> to PDF </a>
+                </li>
+                <li class="list-inline-item">|</li>
+                <li class="list-inline-item">
+                <a href="{{ route('employees.create') }}" class="btn
+                btn-primary">
+                <i class="bi bi-plus-circle me-1"></i> Create Employee
+                </a>
+                </li>
+                </ul>
+                
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label for="firstName" class="form-label">First Name</label>

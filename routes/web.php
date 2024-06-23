@@ -47,10 +47,18 @@ Route::get('/local-disk', function() {
     return asset('storage/local-example.txt');
 });
 
+Route::get('getEmployees', [EmployeeController::class,
+'getData'])->name('employees.getData');
+
 Route::get('/public-disk', function() {
     Storage::disk('public')->put('public-example.txt', 'This is public example content');
     return asset('storage/public-example.txt');
 });
+Route::get('exportExcel', [EmployeeController::class,
+'exportExcel'])->name('employees.exportExcel');
+
+Route::get('exportPdf', [EmployeeController::class,
+'exportPdf'])->name('employees.exportPdf');
 
 Route::get('/retrieve-local-file', function() {
     if (Storage::disk('local')->exists('local-example.txt')) {

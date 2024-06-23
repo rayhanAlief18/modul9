@@ -5,6 +5,29 @@
         <div class="col-lg-9 col-xl-10">
             <h4 class="mb-3"><?php echo e($pageTitle); ?></h4>
         </div>
+     
+        <div class="col-lg-3 col-xl-6">
+            <ul class="list-inline mb-0 float-end">
+                <li class="list-inline-item">
+                    <a href="<?php echo e(route('employees.exportPdf')); ?>" class="btn
+                    btn-outline-danger">
+                    <i class="bi bi-download me-1"></i> to PDF </a>
+                    </li>
+                <li class="list-inline-item">
+            <a href="<?php echo e(route('employees.exportExcel')); ?>" class="btn
+            btn-outline-success">
+            <i class="bi bi-download me-1"></i> to Excel </a>
+            </li>
+            <li class="list-inline-item">|</li>
+            <li class="list-inline-item">
+            <a href="<?php echo e(route('employees.create')); ?>" class="btn
+            btn-primary">
+            <i class="bi bi-plus-circle me-1"></i> Create Employee
+            </a>
+            </li>
+            </ul>
+            </div>
+            
         <div class="col-lg-3 col-xl-2">
             <div class="d-grid gap-2">
                 <a href="<?php echo e(route('employees.create')); ?>" class="btn
@@ -14,8 +37,8 @@ btn-primary">Create Employee</a>
     </div>
     <hr>
     <div class="table-responsive border p-3 rounded-3">
-        <table class="table table-bordered table-hover table-striped mb-0
-        bg-white">
+        <table class="table table-bordered table-hover table-striped mb-0 bg-white"
+id="employeeTable">
             <thead>
                 <tr>
                     <th>First Name</th>
@@ -42,6 +65,55 @@ btn-primary">Create Employee</a>
     </div>
 </div>
 
+<?php $__env->startPush('scripts'); ?>
+<script type="module">
+$(document).ready(function() {
+$("#employeeTable").DataTable({ serverSide: true, processing: true, ajax: "/getEmployees", columns: [
+{ data: "id", name: "id", visible: false },
+{ data: "DT_RowIndex", name: "DT_RowIndex", orderable: false,
+searchable: false },
+{ data: "firstname", name: "firstname" },
+{ data: "lastname", name: "lastname" },
+{ data: "email", name: "email" },
+{ data: "age", name: "age" },
+{ data: "position.name", name: "position.name" }, { data: "actions", name: "actions", orderable: false,
+searchable: false }, ], order: [[0, "desc"]], lengthMenu: [
+[10, 25, 50, 100, -1],
+[10, 25, 50, 100, "All"],
+],
+});
+});
+$(function() {
+$("#employeeTable").DataTable({ serverSide: true,
+processing: true, ajax: "/getEmployees", columns: [
+{ data: "id", name: "id", visible: false },
+{ data: "DT_RowIndex", name: "DT_RowIndex", orderable: false,
+searchable: false },
+{ data: "firstname", name: "firstname" },
+{ data: "lastname", name: "lastname" },
+{ data: "email", name: "email" },
+{ data: "age", name: "age" },
+{ data: "position.name", name: "position.name" },
+{ data: "actions", name: "actions", orderable: false, searchable:
+false }, ], order: [[0, "desc"]], lengthMenu: [
+[10, 25, 50, 100, -1],
+[10, 25, 50, 100, "All"],
+],
+});
+$(".datatable").on("click", ".btn-delete", function (e) {
+e.preventDefault();
+var form = $(this).closest("form"); var name = $(this).data("name");
+Swal.fire({ title: "Are you sure want to delete\n" + name + "?", text: "You won't be able to revert this!", icon: "warning", showCancelButton: true, confirmButtonClass: "bg-primary", confirmButtonText: "Yes, delete it!",
+}).then((result) => { if (result.isConfirmed) { form.submit();
+}
+});
+});
+});
+
+</script>
+<?php $__env->stopPush(); ?>
+
+    
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\Kuliah\Semester 4\Pemrograman Framework\Praktikum 9\Praktikum-Modul-9-main\resources\views/employee/index.blade.php ENDPATH**/ ?>

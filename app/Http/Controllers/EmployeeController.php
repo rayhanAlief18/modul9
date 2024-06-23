@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use RealRashid\SweetAlert\Facades\Alert;
 use App\Models\Employee;
 use App\Models\Position;
 use Illuminate\Http\Request;
@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use PDF; 
+
+use Maatwebsite\Excel\Facades\Excel; use App\Exports\EmployeesExport;
+
+
 
 
 class EmployeeController extends Controller
@@ -16,6 +21,14 @@ class EmployeeController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public function exportPdf()
+{
+$employees = Employee::all();
+$pdf = PDF::loadView('employee.export_pdf', compact('employees'));
+return $pdf->download('employees.pdf'); }
+    public function exportExcel()
+{ return Excel::download(new EmployeesExport, 'employees.xlsx');
+}
     public function index()
     {
         $pageTitle = 'Employee List';
@@ -89,7 +102,9 @@ class EmployeeController extends Controller
 
     $employee->save();
 
-    return redirect()->route('employees.index');
+    Alert::success('Added Successfully', 'Employee Data Added Successfully.');
+    return redirect()->route('employees.index'); 
+
 }
 
 
@@ -149,6 +164,18 @@ class EmployeeController extends Controller
 
     return redirect()->route('employees.index')->with('success', 'Data karyawan berhasil diperbarui.');
 }
+public function getData(Request $request)
+{
+$employees = Employee::with('position');
+if ($request->ajax()) { return datatables()->of($employees)
+->addIndexColumn()
+->addColumn('actions', function($employee) {
+return view('employee.actions', compact('employee'));
+})
+->toJson();
+}
+}
+
 
 
     public function destroy(string $id)
@@ -162,9 +189,11 @@ class EmployeeController extends Controller
 
     // Hapus data karyawan dari database
     $employee->delete();
-
+    
+    Alert::success('Added Successfully', 'Employee Data delete Successfully.');
     return redirect()->route('employees.index')->with('success', 'Data karyawan berhasil dihapus.');
     }
+
 
 
 }

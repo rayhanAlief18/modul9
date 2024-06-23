@@ -21,6 +21,7 @@ initial-scale=1.0">
         </div>
     </div>
     <?php echo app('Illuminate\Foundation\Vite')('resources/js/app.js'); ?>
+    
 </body>
 
 </html>
